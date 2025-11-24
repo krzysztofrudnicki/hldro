@@ -1,0 +1,268 @@
+id,parent_id,name,level,primary_color,secondary_color,color_name
+1,,AGD,1,#2563eb,#60a5fa,Niebieski
+2,1,Duże AGD,2,#2563eb,#60a5fa,Niebieski
+3,2,Lodówki i zamrażarki,3,#2563eb,#60a5fa,Niebieski
+4,2,Pralki i suszarki,3,#2563eb,#60a5fa,Niebieski
+5,2,Zmywarki,3,#2563eb,#60a5fa,Niebieski
+6,2,Kuchenki i piekarniki,3,#2563eb,#60a5fa,Niebieski
+7,2,Okapy,3,#2563eb,#60a5fa,Niebieski
+8,1,Małe AGD,2,#2563eb,#60a5fa,Niebieski
+9,8,Ekspresy do kawy,3,#2563eb,#60a5fa,Niebieski
+10,8,Blendery i miksery,3,#2563eb,#60a5fa,Niebieski
+11,8,Odkurzacze,3,#2563eb,#60a5fa,Niebieski
+12,8,Roboty kuchenne,3,#2563eb,#60a5fa,Niebieski
+13,8,Żelazka i parownice,3,#2563eb,#60a5fa,Niebieski
+14,1,Akcesoria AGD,2,#2563eb,#60a5fa,Niebieski
+15,14,Filtry i wkłady,3,#2563eb,#60a5fa,Niebieski
+16,14,Części zamienne,3,#2563eb,#60a5fa,Niebieski
+17,14,Środki czyszczące,3,#2563eb,#60a5fa,Niebieski
+18,,Antyki,1,#92400e,#d97706,Brązowy
+19,18,Meble antyczne,2,#92400e,#d97706,Brązowy
+20,19,Stoły i krzesła,3,#92400e,#d97706,Brązowy
+21,19,Szafy i komody,3,#92400e,#d97706,Brązowy
+22,19,Lustra i ramy,3,#92400e,#d97706,Brązowy
+23,18,Sztuka i rzemiosło,2,#92400e,#d97706,Brązowy
+24,23,Obrazy i grafiki,3,#92400e,#d97706,Brązowy
+25,23,Rzeźby,3,#92400e,#d97706,Brązowy
+26,23,Porcelana i ceramika,3,#92400e,#d97706,Brązowy
+27,18,Biżuteria antyczna,2,#92400e,#d97706,Brązowy
+28,27,Pierścionki,3,#92400e,#d97706,Brązowy
+29,27,Naszyjniki i broszki,3,#92400e,#d97706,Brązowy
+30,27,Zegarki,3,#92400e,#d97706,Brązowy
+31,,Dla dzieci,1,#fbbf24,#fcd34d,Żółty
+32,31,Zabawki,2,#fbbf24,#fcd34d,Żółty
+33,32,Lalki i maskotki,3,#fbbf24,#fcd34d,Żółty
+34,32,Klocki i puzzle,3,#fbbf24,#fcd34d,Żółty
+35,32,Zabawki edukacyjne,3,#fbbf24,#fcd34d,Żółty
+36,32,Pojazdy i zdalnie sterowane,3,#fbbf24,#fcd34d,Żółty
+37,31,Ubrania i obuwie,2,#fbbf24,#fcd34d,Żółty
+38,37,Odzież niemowlęca,3,#fbbf24,#fcd34d,Żółty
+39,37,Odzież dziecięca,3,#fbbf24,#fcd34d,Żółty
+40,37,Obuwie dziecięce,3,#fbbf24,#fcd34d,Żółty
+41,31,Pokój dziecka,2,#fbbf24,#fcd34d,Żółty
+42,41,Meble dziecięce,3,#fbbf24,#fcd34d,Żółty
+43,41,Pościel i dekoracje,3,#fbbf24,#fcd34d,Żółty
+44,41,Oświetlenie,3,#fbbf24,#fcd34d,Żółty
+45,31,Wózki i foteliki,2,#fbbf24,#fcd34d,Żółty
+46,45,Wózki spacerowe,3,#fbbf24,#fcd34d,Żółty
+47,45,Foteliki samochodowe,3,#fbbf24,#fcd34d,Żółty
+48,45,Nosidełka,3,#fbbf24,#fcd34d,Żółty
+49,,Dla zwierząt,1,#16a34a,#4ade80,Zielony
+50,49,Psy,2,#16a34a,#4ade80,Zielony
+51,50,Karma dla psów,3,#16a34a,#4ade80,Zielony
+52,50,Zabawki dla psów,3,#16a34a,#4ade80,Zielony
+53,50,Legowiska i budy,3,#16a34a,#4ade80,Zielony
+54,50,Smycze i obroże,3,#16a34a,#4ade80,Zielony
+55,49,Koty,2,#16a34a,#4ade80,Zielony
+56,55,Karma dla kotów,3,#16a34a,#4ade80,Zielony
+57,55,Zabawki dla kotów,3,#16a34a,#4ade80,Zielony
+58,55,Legowiska i drapaki,3,#16a34a,#4ade80,Zielony
+59,55,Kuwety i żwirek,3,#16a34a,#4ade80,Zielony
+60,49,Inne zwierzęta,2,#16a34a,#4ade80,Zielony
+61,60,Akwaria i rybki,3,#16a34a,#4ade80,Zielony
+62,60,Terraria i gady,3,#16a34a,#4ade80,Zielony
+63,60,Ptaki,3,#16a34a,#4ade80,Zielony
+64,60,Gryzonie,3,#16a34a,#4ade80,Zielony
+65,,Dom i ogród,1,#65a30d,#a3e635,Limonkowy
+66,65,Meble,2,#65a30d,#a3e635,Limonkowy
+67,66,Sofy i fotele,3,#65a30d,#a3e635,Limonkowy
+68,66,Stoły i krzesła,3,#65a30d,#a3e635,Limonkowy
+69,66,Szafy i komody,3,#65a30d,#a3e635,Limonkowy
+70,66,Łóżka i materace,3,#65a30d,#a3e635,Limonkowy
+71,65,Dekoracje,2,#65a30d,#a3e635,Limonkowy
+72,71,Oświetlenie,3,#65a30d,#a3e635,Limonkowy
+73,71,Tekstylia domowe,3,#65a30d,#a3e635,Limonkowy
+74,71,Ramki i obrazy,3,#65a30d,#a3e635,Limonkowy
+75,71,Świece i wazony,3,#65a30d,#a3e635,Limonkowy
+76,65,Ogród,2,#65a30d,#a3e635,Limonkowy
+77,76,Rośliny i nasiona,3,#65a30d,#a3e635,Limonkowy
+78,76,Narzędzia ogrodnicze,3,#65a30d,#a3e635,Limonkowy
+79,76,Meble ogrodowe,3,#65a30d,#a3e635,Limonkowy
+80,76,Grille i akcesoria,3,#65a30d,#a3e635,Limonkowy
+81,65,Narzędzia i majsterkowanie,2,#65a30d,#a3e635,Limonkowy
+82,81,Elektronarzędzia,3,#65a30d,#a3e635,Limonkowy
+83,81,Narzędzia ręczne,3,#65a30d,#a3e635,Limonkowy
+84,81,Materiały budowlane,3,#65a30d,#a3e635,Limonkowy
+85,,Elektronika,1,#1e40af,#3b82f6,Cyjanowy
+86,85,Komputery,2,#1e40af,#3b82f6,Cyjanowy
+87,86,Laptopy,3,#1e40af,#3b82f6,Cyjanowy
+88,86,Komputery stacjonarne,3,#1e40af,#3b82f6,Cyjanowy
+89,86,Monitory,3,#1e40af,#3b82f6,Cyjanowy
+90,86,Drukarki i skanery,3,#1e40af,#3b82f6,Cyjanowy
+91,85,Telefony i tablety,2,#1e40af,#3b82f6,Cyjanowy
+92,91,Smartfony,3,#1e40af,#3b82f6,Cyjanowy
+93,91,Telefony klasyczne,3,#1e40af,#3b82f6,Cyjanowy
+94,91,Tablety,3,#1e40af,#3b82f6,Cyjanowy
+95,91,Smartwatche,3,#1e40af,#3b82f6,Cyjanowy
+96,85,Akcesoria komputerowe,2,#1e40af,#3b82f6,Cyjanowy
+97,96,Klawiatury i myszki,3,#1e40af,#3b82f6,Cyjanowy
+98,96,Słuchawki i głośniki,3,#1e40af,#3b82f6,Cyjanowy
+99,96,Pendrive i dyski,3,#1e40af,#3b82f6,Cyjanowy
+100,96,Kable i adaptery,3,#1e40af,#3b82f6,Cyjanowy
+101,85,Komponenty,2,#1e40af,#3b82f6,Cyjanowy
+102,101,Procesory,3,#1e40af,#3b82f6,Cyjanowy
+103,101,Karty graficzne,3,#1e40af,#3b82f6,Cyjanowy
+104,101,Pamięci RAM,3,#1e40af,#3b82f6,Cyjanowy
+105,101,Płyty główne,3,#1e40af,#3b82f6,Cyjanowy
+106,,Gry,1,#9333ea,#c084fc,Fioletowy
+107,106,Konsole,2,#9333ea,#c084fc,Fioletowy
+108,107,PlayStation,3,#9333ea,#c084fc,Fioletowy
+109,107,Xbox,3,#9333ea,#c084fc,Fioletowy
+110,107,Nintendo,3,#9333ea,#c084fc,Fioletowy
+111,107,Konsole retro,3,#9333ea,#c084fc,Fioletowy
+112,106,Gry komputerowe,2,#9333ea,#c084fc,Fioletowy
+113,112,Gry PC,3,#9333ea,#c084fc,Fioletowy
+114,112,Gry na konsole,3,#9333ea,#c084fc,Fioletowy
+115,112,Gry VR,3,#9333ea,#c084fc,Fioletowy
+116,106,Gry planszowe,2,#9333ea,#c084fc,Fioletowy
+117,116,Strategiczne,3,#9333ea,#c084fc,Fioletowy
+118,116,Rodzinne,3,#9333ea,#c084fc,Fioletowy
+119,116,Karciane,3,#9333ea,#c084fc,Fioletowy
+120,116,RPG,3,#9333ea,#c084fc,Fioletowy
+121,106,Akcesoria gamingowe,2,#9333ea,#c084fc,Fioletowy
+122,121,Gamepady,3,#9333ea,#c084fc,Fioletowy
+123,121,Kierownice,3,#9333ea,#c084fc,Fioletowy
+124,121,Słuchawki gamingowe,3,#9333ea,#c084fc,Fioletowy
+125,121,Fotele gamingowe,3,#9333ea,#c084fc,Fioletowy
+126,,Moda,1,#db2777,#f472b6,Różowy
+127,126,Odzież damska,2,#db2777,#f472b6,Różowy
+128,127,Sukienki i spódnice,3,#db2777,#f472b6,Różowy
+129,127,Bluzki i koszule,3,#db2777,#f472b6,Różowy
+130,127,Spodnie i jeansy,3,#db2777,#f472b6,Różowy
+131,127,Kurtki i płaszcze,3,#db2777,#f472b6,Różowy
+132,126,Odzież męska,2,#db2777,#f472b6,Różowy
+133,132,Koszule i koszulki,3,#db2777,#f472b6,Różowy
+134,132,Spodnie i jeansy,3,#db2777,#f472b6,Różowy
+135,132,Marynarki i garnitury,3,#db2777,#f472b6,Różowy
+136,132,Kurtki i płaszcze,3,#db2777,#f472b6,Różowy
+137,126,Obuwie,2,#db2777,#f472b6,Różowy
+138,137,Buty damskie,3,#db2777,#f472b6,Różowy
+139,137,Buty męskie,3,#db2777,#f472b6,Różowy
+140,137,Sneakersy,3,#db2777,#f472b6,Różowy
+141,137,Buty sportowe,3,#db2777,#f472b6,Różowy
+142,126,Akcesoria modowe,2,#db2777,#f472b6,Różowy
+143,142,Torebki i plecaki,3,#db2777,#f472b6,Różowy
+144,142,Biżuteria,3,#db2777,#f472b6,Różowy
+145,142,Zegarki,3,#db2777,#f472b6,Różowy
+146,142,Paski i portfele,3,#db2777,#f472b6,Różowy
+147,,Motoryzacja,1,#dc2626,#ef4444,Czerwony
+148,147,Samochody osobowe,2,#dc2626,#ef4444,Czerwony
+149,148,Auta miejskie,3,#dc2626,#ef4444,Czerwony
+150,148,SUV-y,3,#dc2626,#ef4444,Czerwony
+151,148,Sportowe,3,#dc2626,#ef4444,Czerwony
+152,148,Dostawcze,3,#dc2626,#ef4444,Czerwony
+153,147,Motocykle i skutery,2,#dc2626,#ef4444,Czerwony
+154,153,Motocykle,3,#dc2626,#ef4444,Czerwony
+155,153,Skutery,3,#dc2626,#ef4444,Czerwony
+156,153,Quady,3,#dc2626,#ef4444,Czerwony
+157,147,Części samochodowe,2,#dc2626,#ef4444,Czerwony
+158,157,Silnik i układ napędowy,3,#dc2626,#ef4444,Czerwony
+159,157,Zawieszenie i hamulce,3,#dc2626,#ef4444,Czerwony
+160,157,Oświetlenie,3,#dc2626,#ef4444,Czerwony
+161,157,Karoseria,3,#dc2626,#ef4444,Czerwony
+162,147,Akcesoria samochodowe,2,#dc2626,#ef4444,Czerwony
+163,162,Elektronika samochodowa,3,#dc2626,#ef4444,Czerwony
+164,162,Opony i felgi,3,#dc2626,#ef4444,Czerwony
+165,162,Kosmetyki samochodowe,3,#dc2626,#ef4444,Czerwony
+166,162,Bagażniki i boxy,3,#dc2626,#ef4444,Czerwony
+167,,Muzyka,1,#ea580c,#fb923c,Pomarańczowy
+168,167,Instrumenty strunowe,2,#ea580c,#fb923c,Pomarańczowy
+169,168,Gitary,3,#ea580c,#fb923c,Pomarańczowy
+170,168,Gitary basowe,3,#ea580c,#fb923c,Pomarańczowy
+171,168,Skrzypce,3,#ea580c,#fb923c,Pomarańczowy
+172,168,Ukulele,3,#ea580c,#fb923c,Pomarańczowy
+173,167,Instrumenty klawiszowe,2,#ea580c,#fb923c,Pomarańczowy
+174,173,Pianina i fortepiany,3,#ea580c,#fb923c,Pomarańczowy
+175,173,Keyboardy,3,#ea580c,#fb923c,Pomarańczowy
+176,173,Syntezatory,3,#ea580c,#fb923c,Pomarańczowy
+177,167,Instrumenty perkusyjne,2,#ea580c,#fb923c,Pomarańczowy
+178,177,Perkusje akustyczne,3,#ea580c,#fb923c,Pomarańczowy
+179,177,Perkusje elektroniczne,3,#ea580c,#fb923c,Pomarańczowy
+180,177,Djembe i bębny,3,#ea580c,#fb923c,Pomarańczowy
+181,167,Sprzęt nagłośnieniowy,2,#ea580c,#fb923c,Pomarańczowy
+182,181,Wzmacniacze,3,#ea580c,#fb923c,Pomarańczowy
+183,181,Kolumny i głośniki,3,#ea580c,#fb923c,Pomarańczowy
+184,181,Mikrofony,3,#ea580c,#fb923c,Pomarańczowy
+185,181,Mikser,3,#ea580c,#fb923c,Pomarańczowy
+186,,RTV,1,#0891b2,#06b6d4,Turkusowy
+187,186,Telewizory,2,#0891b2,#06b6d4,Turkusowy
+188,187,Telewizory LED,3,#0891b2,#06b6d4,Turkusowy
+189,187,Telewizory OLED,3,#0891b2,#06b6d4,Turkusowy
+190,187,Telewizory QLED,3,#0891b2,#06b6d4,Turkusowy
+191,187,Projektory,3,#0891b2,#06b6d4,Turkusowy
+192,186,Audio,2,#0891b2,#06b6d4,Turkusowy
+193,192,Słuchawki,3,#0891b2,#06b6d4,Turkusowy
+194,192,Głośniki,3,#0891b2,#06b6d4,Turkusowy
+195,192,Soundbary,3,#0891b2,#06b6d4,Turkusowy
+196,192,Wieże i miniwieże,3,#0891b2,#06b6d4,Turkusowy
+197,186,Kamery i fotografia,2,#0891b2,#06b6d4,Turkusowy
+198,197,Aparaty cyfrowe,3,#0891b2,#06b6d4,Turkusowy
+199,197,Aparaty lustrzanki,3,#0891b2,#06b6d4,Turkusowy
+200,197,Kamery wideo,3,#0891b2,#06b6d4,Turkusowy
+201,197,Obiektywy,3,#0891b2,#06b6d4,Turkusowy
+202,186,Akcesoria RTV,2,#0891b2,#06b6d4,Turkusowy
+203,202,Kable i przewody,3,#0891b2,#06b6d4,Turkusowy
+204,202,Uchwyty do TV,3,#0891b2,#06b6d4,Turkusowy
+205,202,Piloty,3,#0891b2,#06b6d4,Turkusowy
+206,202,Anteny,3,#0891b2,#06b6d4,Turkusowy
+207,,Sport i fitness,1,#84cc16,#a3e635,Limonkowy jasny
+208,207,Sprzęt fitness,2,#84cc16,#a3e635,Limonkowy jasny
+209,208,Siłownie domowe,3,#84cc16,#a3e635,Limonkowy jasny
+210,208,Bieżnie i rowery,3,#84cc16,#a3e635,Limonkowy jasny
+211,208,Ciężary i hantle,3,#84cc16,#a3e635,Limonkowy jasny
+212,208,Maty i akcesoria,3,#84cc16,#a3e635,Limonkowy jasny
+213,207,Odzież sportowa,2,#84cc16,#a3e635,Limonkowy jasny
+214,213,Koszulki i spodenki,3,#84cc16,#a3e635,Limonkowy jasny
+215,213,Dresy i bluzy,3,#84cc16,#a3e635,Limonkowy jasny
+216,213,Stroje treningowe,3,#84cc16,#a3e635,Limonkowy jasny
+217,213,Stroje kąpielowe,3,#84cc16,#a3e635,Limonkowy jasny
+218,207,Sporty zespołowe,2,#84cc16,#a3e635,Limonkowy jasny
+219,218,Piłka nożna,3,#84cc16,#a3e635,Limonkowy jasny
+220,218,Koszykówka,3,#84cc16,#a3e635,Limonkowy jasny
+221,218,Siatkówka,3,#84cc16,#a3e635,Limonkowy jasny
+222,218,Tenis,3,#84cc16,#a3e635,Limonkowy jasny
+223,207,Sporty indywidualne,2,#84cc16,#a3e635,Limonkowy jasny
+224,223,Rowerowe,3,#84cc16,#a3e635,Limonkowy jasny
+225,223,Bieganie,3,#84cc16,#a3e635,Limonkowy jasny
+226,223,Pływanie,3,#84cc16,#a3e635,Limonkowy jasny
+227,223,Joga i pilates,3,#84cc16,#a3e635,Limonkowy jasny
+228,,Usługi,1,#0d9488,#14b8a6,Morski
+229,228,Edukacja i kursy,2,#0d9488,#14b8a6,Morski
+230,229,Języki obce,3,#0d9488,#14b8a6,Morski
+231,229,Korepetycje,3,#0d9488,#14b8a6,Morski
+232,229,Kursy zawodowe,3,#0d9488,#14b8a6,Morski
+233,229,Kursy online,3,#0d9488,#14b8a6,Morski
+234,228,Remonty i budowa,2,#0d9488,#14b8a6,Morski
+235,234,Prace ogólnobudowlane,3,#0d9488,#14b8a6,Morski
+236,234,Elektryka,3,#0d9488,#14b8a6,Morski
+237,234,Hydraulika,3,#0d9488,#14b8a6,Morski
+238,234,Malowanie,3,#0d9488,#14b8a6,Morski
+239,228,Transport i przeprowadzki,2,#0d9488,#14b8a6,Morski
+240,239,Przeprowadzki,3,#0d9488,#14b8a6,Morski
+241,239,Transport mebli,3,#0d9488,#14b8a6,Morski
+242,239,Wynajem aut,3,#0d9488,#14b8a6,Morski
+243,228,Inne usługi,2,#0d9488,#14b8a6,Morski
+244,243,Sprzątanie,3,#0d9488,#14b8a6,Morski
+245,243,Opieka nad dziećmi,3,#0d9488,#14b8a6,Morski
+246,243,Fotografia,3,#0d9488,#14b8a6,Morski
+247,243,Catering,3,#0d9488,#14b8a6,Morski
+248,,Zdrowie i uroda,1,#ec4899,#f9a8d4,Różowy pastelowy
+249,248,Kosmetyki,2,#ec4899,#f9a8d4,Różowy pastelowy
+250,249,Pielęgnacja twarzy,3,#ec4899,#f9a8d4,Różowy pastelowy
+251,249,Makijaż,3,#ec4899,#f9a8d4,Różowy pastelowy
+252,249,Pielęgnacja ciała,3,#ec4899,#f9a8d4,Różowy pastelowy
+253,249,Perfumy,3,#ec4899,#f9a8d4,Różowy pastelowy
+254,248,Pielęgnacja włosów,2,#ec4899,#f9a8d4,Różowy pastelowy
+255,254,Szampony i odżywki,3,#ec4899,#f9a8d4,Różowy pastelowy
+256,254,Stylizacja włosów,3,#ec4899,#f9a8d4,Różowy pastelowy
+257,254,Akcesoria do włosów,3,#ec4899,#f9a8d4,Różowy pastelowy
+258,248,Sprzęt medyczny,2,#ec4899,#f9a8d4,Różowy pastelowy
+259,258,Ciśnieniomierze,3,#ec4899,#f9a8d4,Różowy pastelowy
+260,258,Termometry,3,#ec4899,#f9a8d4,Różowy pastelowy
+261,258,Inhalatory,3,#ec4899,#f9a8d4,Różowy pastelowy
+262,258,Aparaty słuchowe,3,#ec4899,#f9a8d4,Różowy pastelowy
+263,248,Suplementy i witaminy,2,#ec4899,#f9a8d4,Różowy pastelowy
+264,263,Witaminy,3,#ec4899,#f9a8d4,Różowy pastelowy
+265,263,Minerały,3,#ec4899,#f9a8d4,Różowy pastelowy
+266,263,Odchudzanie,3,#ec4899,#f9a8d4,Różowy pastelowy
+267,263,Suplementy sportowe,3,#ec4899,#f9a8d4,Różowy pastelowy
