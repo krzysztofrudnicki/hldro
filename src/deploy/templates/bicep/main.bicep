@@ -44,7 +44,7 @@ param tags object = {
 var resourceGroupName = '${projectName}-${environment}-rg'
 var storageAccountName = '${projectName}${environment}st${uniqueString(resourceGroupName)}'
 var functionAppName = '${projectName}-${environment}-func'
-var serviceBusName = '${projectName}-${environment}-sb'
+var serviceBusName = '${projectName}-${environment}-servicebus'
 var appInsightsName = '${projectName}-${environment}-ai'
 var sqlServerName = '${projectName}-${environment}-sql'
 var staticWebAppName = '${projectName}-${environment}-web'
@@ -164,17 +164,17 @@ module functionApp 'modules/function-app-with-keyvault.bicep' = {
   ]
 }
 
-// 7. Static Web App (Frontend with CDN)
-module staticWebApp 'modules/static-web-app.bicep' = {
-  name: 'staticwebapp-deployment'
-  scope: rg
-  params: {
-    staticWebAppName: staticWebAppName
-    location: location
-    environment: environment
-    repositoryUrl: repositoryUrl
-    tags: tags
-  }
+// // 7. Static Web App (Frontend with CDN)
+// module staticWebApp 'modules/static-web-app.bicep' = {
+//   name: 'staticwebapp-deployment'
+//   scope: rg
+//   params: {
+//     staticWebAppName: staticWebAppName
+//     location: location
+//     environment: environment
+//     repositoryUrl: repositoryUrl
+//     tags: tags
+//   }
 }
 
 // ========================================
@@ -208,10 +208,10 @@ output functionAppName string = functionApp.outputs.functionAppName
 output functionAppUrl string = functionApp.outputs.functionAppUrl
 output functionAppPrincipalId string = functionApp.outputs.principalId
 
-// Static Web App (Frontend)
-output staticWebAppName string = staticWebApp.outputs.staticWebAppName
-output staticWebAppUrl string = 'https://${staticWebApp.outputs.defaultHostname}'
-output staticWebAppApiKey string = staticWebApp.outputs.apiKey
+// // Static Web App (Frontend)
+// output staticWebAppName string = staticWebApp.outputs.staticWebAppName
+// output staticWebAppUrl string = 'https://${staticWebApp.outputs.defaultHostname}'
+// output staticWebAppApiKey string = staticWebApp.outputs.apiKey
 
 // Security Info
 output securityInfo string = useKeyVault ? 'All secrets are stored in Key Vault: ${keyVaultName}' : 'Key Vault is disabled - secrets in app settings'
