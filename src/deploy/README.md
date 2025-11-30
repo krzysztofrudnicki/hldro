@@ -13,10 +13,6 @@ deploy/
 ├── tests/                  # Testy deploymentu (integration/smoke/validation)
 ├── docs/                   # Dokumentacja (runbooki, procedury)
 ├── rollback/               # Procedury rollback
-├── 1-provisioning/         # Provisioning infrastruktury
-├── 2-infrastructure-config/# Konfiguracja infrastruktury
-├── 3-deployment/           # Deployment aplikacji
-└── 4-post-deployment-config/ # Konfiguracja post-deployment
 ```
 
 ## Quick Start
