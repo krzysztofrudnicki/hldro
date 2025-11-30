@@ -1,0 +1,240 @@
+# Azure DevOps Pipeline dla HLDRO
+# Multi-stage pipeline: Build -> Infrastructure -> Deploy -> Test
+
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+  paths:
+    include:
+      - src/**
+      - deploy/**
+
+variables:
+  - group: hldro-common # Variable group w Azure DevOps
+  - name: buildConfiguration
+    value: 'Release'
+
+stages:
+  # ========================================
+  # STAGE 1: BUILD
+  # ========================================
+  - stage: Build
+    displayName: 'Build Application'
+    jobs:
+      - job: BuildBackend
+        displayName: 'Build Backend (Azure Functions)'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: UseDotNet@2
+            displayName: 'Use .NET SDK'
+            inputs:
+              version: '8.x'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Restore dependencies'
+            inputs:
+              command: 'restore'
+              projects: 'src/backend/**/*.csproj'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Build'
+            inputs:
+              command: 'build'
+              projects: 'src/backend/**/*.csproj'
+              arguments: '--configuration $(buildConfiguration)'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Run Unit Tests'
+            inputs:
+              command: 'test'
+              projects: 'src/backend/**/*Tests.csproj'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Publish'
+            inputs:
+              command: 'publish'
+              publishWebProjects: false
+              projects: 'src/backend/**/*.csproj'
+              arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/backend'
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Backend Artifacts'
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)/backend'
+              ArtifactName: 'backend'
+
+      - job: BuildFrontend
+        displayName: 'Build Frontend'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: NodeTool@0
+            displayName: 'Use Node.js'
+            inputs:
+              versionSpec: '20.x'
+
+          - script: |
+              cd src/frontend
+              npm ci
+              npm run build
+            displayName: 'Build Frontend'
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Frontend Artifacts'
+            inputs:
+              PathtoPublish: 'src/frontend/dist'
+              ArtifactName: 'frontend'
+
+  # ========================================
+  # STAGE 2: DEPLOY TO DEV
+  # ========================================
+  - stage: DeployDev
+    displayName: 'Deploy to Dev'
+    dependsOn: Build
+    condition: succeeded()
+    variables:
+      - group: hldro-dev
+      - name: environment
+        value: 'dev'
+    jobs:
+      - deployment: DeployInfrastructure
+        displayName: 'Deploy Infrastructure (Bicep)'
+        environment: 'hldro-dev'
+        pool:
+          vmImage: 'ubuntu-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+
+                - task: AzureCLI@2
+                  displayName: 'Deploy Bicep Templates'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnection)'
+                    scriptType: 'bash'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: 'src/deploy/scripts/bash/deploy-infrastructure.sh'
+                    arguments: '$(environment)'
+
+      - deployment: DeployApplication
+        displayName: 'Deploy Application'
+        dependsOn: DeployInfrastructure
+        environment: 'hldro-dev'
+        pool:
+          vmImage: 'ubuntu-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: backend
+
+                - download: current
+                  artifact: frontend
+
+                - task: AzureFunctionApp@1
+                  displayName: 'Deploy Azure Functions'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnection)'
+                    appType: 'functionApp'
+                    appName: '$(functionAppName)'
+                    package: '$(Pipeline.Workspace)/backend/**/*.zip'
+
+      - job: RunTests
+        displayName: 'Run Smoke Tests'
+        dependsOn: DeployApplication
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - checkout: self
+
+          - task: AzurePowerShell@5
+            displayName: 'Run Smoke Tests'
+            inputs:
+              azureSubscription: '$(azureServiceConnection)'
+              ScriptType: 'FilePath'
+              ScriptPath: 'src/deploy/scripts/powershell/run-smoke-tests.ps1'
+              ScriptArguments: '-Environment $(environment)'
+              azurePowerShellVersion: 'LatestVersion'
+
+  # ========================================
+  # STAGE 3: DEPLOY TO PROD (with approval)
+  # ========================================
+  - stage: DeployProd
+    displayName: 'Deploy to Production'
+    dependsOn: DeployDev
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    variables:
+      - group: hldro-prod
+      - name: environment
+        value: 'prod'
+    jobs:
+      - deployment: DeployProduction
+        displayName: 'Deploy to Production'
+        environment: 'hldro-prod' # Wymaga manual approval w Azure DevOps
+        pool:
+          vmImage: 'ubuntu-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+
+                # Infrastructure
+                - task: AzureCLI@2
+                  displayName: 'Deploy Infrastructure'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnection)'
+                    scriptType: 'bash'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: 'src/deploy/scripts/bash/deploy-infrastructure.sh'
+                    arguments: '$(environment)'
+
+                # Application
+                - download: current
+                  artifact: backend
+
+                - task: AzureFunctionApp@1
+                  displayName: 'Deploy to Production Slot'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnection)'
+                    appType: 'functionApp'
+                    appName: '$(functionAppName)'
+                    package: '$(Pipeline.Workspace)/backend/**/*.zip'
+                    deployToSlotOrASE: true
+                    resourceGroupName: '$(resourceGroupName)'
+                    slotName: 'staging'
+
+                # Smoke tests on staging slot
+                - task: AzurePowerShell@5
+                  displayName: 'Test Staging Slot'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnection)'
+                    ScriptType: 'FilePath'
+                    ScriptPath: 'src/deploy/scripts/powershell/run-smoke-tests.ps1'
+                    ScriptArguments: '-Environment staging -SlotName staging'
+                    azurePowerShellVersion: 'LatestVersion'
+
+                # Swap slots (blue-green deployment)
+                - task: AzureAppServiceManage@0
+                  displayName: 'Swap Staging to Production'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnection)'
+                    WebAppName: '$(functionAppName)'
+                    ResourceGroupName: '$(resourceGroupName)'
+                    SourceSlot: 'staging'
+                    SwapWithProduction: true
+
+                # Post-deployment validation
+                - task: AzurePowerShell@5
+                  displayName: 'Validate Production'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnection)'
+                    ScriptType: 'FilePath'
+                    ScriptPath: 'src/deploy/tests/validation/validate-deployment.ps1'
+                    ScriptArguments: '-Environment $(environment)'
+                    azurePowerShellVersion: 'LatestVersion'

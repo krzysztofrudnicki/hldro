@@ -1,0 +1,352 @@
+# Infrastructure Deployment Pipeline with Key Vault
+# Deploys infrastructure using Bicep templates
+# All secrets are stored in Azure Key Vault
+
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+  paths:
+    include:
+      - src/deploy/templates/**
+      - src/deploy/environments/**
+
+variables:
+  - group: hldro-common
+
+stages:
+  # ========================================
+  # VALIDATE BICEP
+  # ========================================
+  - stage: Validate
+    displayName: 'Validate Bicep Templates'
+    jobs:
+      - job: ValidateBicep
+        displayName: 'Validate Bicep'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - checkout: self
+
+          - task: AzureCLI@2
+            displayName: 'Bicep Build'
+            inputs:
+              azureSubscription: '$(azureServiceConnection)'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                echo "Building Bicep templates..."
+                az bicep build --file src/deploy/templates/bicep/main.bicep
+
+                echo "Building Key Vault module..."
+                az bicep build --file src/deploy/templates/bicep/modules/key-vault.bicep
+
+                echo "Building Function App module..."
+                az bicep build --file src/deploy/templates/bicep/modules/function-app.bicep
+
+          - task: AzureCLI@2
+            displayName: 'Bicep Lint'
+            inputs:
+              azureSubscription: '$(azureServiceConnection)'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az bicep lint --file src/deploy/templates/bicep/main.bicep
+
+  # ========================================
+  # DEPLOY TO DEV
+  # ========================================
+  - stage: DeployDev
+    displayName: 'Deploy Infrastructure to Dev'
+    dependsOn: Validate
+    condition: succeeded()
+    variables:
+      - group: hldro-dev-secrets
+      - name: environment
+        value: 'dev'
+    jobs:
+      - deployment: DeployInfrastructure
+        displayName: 'Deploy Bicep to Dev'
+        environment: 'hldro-dev-infra'
+        pool:
+          vmImage: 'ubuntu-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+
+                - task: AzureCLI@2
+                  displayName: 'What-If Analysis'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnection)'
+                    scriptType: 'bash'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      echo "Running What-If analysis..."
+                      echo "This will deploy Key Vault with all secrets"
+
+                      az deployment sub what-if \
+                        --name hldro-dev-whatif-$(Build.BuildId) \
+                        --location westeurope \
+                        --template-file src/deploy/templates/bicep/main.bicep \
+                        --parameters src/deploy/environments/dev/parameters.local.json \
+                        --parameters sqlAdminUsername='$(sqlAdminUsername)' \
+                        --parameters sqlAdminPassword='$(sqlAdminPassword)' \
+                        --parameters useKeyVault=true
+
+                - task: AzureCLI@2
+                  displayName: 'Deploy Infrastructure with Key Vault'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnection)'
+                    scriptType: 'bash'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      echo "Deploying infrastructure..."
+                      echo "- Resource Group: hldro-dev-rg"
+                      echo "- Key Vault: hldro-dev-kv"
+                      echo "- Secrets will be stored in Key Vault"
+
+                      az deployment sub create \
+                        --name hldro-dev-$(Build.BuildId) \
+                        --location westeurope \
+                        --template-file src/deploy/templates/bicep/main.bicep \
+                        --parameters src/deploy/environments/dev/parameters.local.json \
+                        --parameters sqlAdminUsername='$(sqlAdminUsername)' \
+                        --parameters sqlAdminPassword='$(sqlAdminPassword)' \
+                        --parameters useKeyVault=true \
+                        --output table
+
+                - task: AzureCLI@2
+                  displayName: 'Get Deployment Outputs'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnection)'
+                    scriptType: 'bash'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      echo "==================================="
+                      echo "Deployment Outputs:"
+                      echo "==================================="
+
+                      OUTPUTS=$(az deployment sub show \
+                        --name hldro-dev-$(Build.BuildId) \
+                        --query properties.outputs \
+                        --output json)
+
+                      echo "$OUTPUTS" | jq .
+
+                      # Extract key values
+                      KEY_VAULT_NAME=$(echo "$OUTPUTS" | jq -r '.keyVaultName.value')
+                      FUNCTION_APP_NAME=$(echo "$OUTPUTS" | jq -r '.functionAppName.value')
+
+                      echo ""
+                      echo "==================================="
+                      echo "Key Resources:"
+                      echo "==================================="
+                      echo "Key Vault: $KEY_VAULT_NAME"
+                      echo "Function App: $FUNCTION_APP_NAME"
+
+                - task: AzureCLI@2
+                  displayName: 'Verify Key Vault Secrets'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnection)'
+                    scriptType: 'bash'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      echo "Verifying Key Vault secrets..."
+
+                      OUTPUTS=$(az deployment sub show \
+                        --name hldro-dev-$(Build.BuildId) \
+                        --query properties.outputs \
+                        --output json)
+
+                      KEY_VAULT_NAME=$(echo "$OUTPUTS" | jq -r '.keyVaultName.value')
+
+                      if [ "$KEY_VAULT_NAME" != "null" ] && [ "$KEY_VAULT_NAME" != "" ]; then
+                        echo "Key Vault: $KEY_VAULT_NAME"
+                        echo ""
+                        echo "Secrets in Key Vault:"
+                        az keyvault secret list \
+                          --vault-name $KEY_VAULT_NAME \
+                          --query "[].{Name:name, Enabled:attributes.enabled}" \
+                          --output table
+                      else
+                        echo "Key Vault not deployed or disabled"
+                      fi
+
+                - task: AzureCLI@2
+                  displayName: 'Verify Function App Configuration'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnection)'
+                    scriptType: 'bash'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      echo "Verifying Function App uses Key Vault references..."
+
+                      OUTPUTS=$(az deployment sub show \
+                        --name hldro-dev-$(Build.BuildId) \
+                        --query properties.outputs \
+                        --output json)
+
+                      FUNCTION_APP_NAME=$(echo "$OUTPUTS" | jq -r '.functionAppName.value')
+                      RESOURCE_GROUP=$(echo "$OUTPUTS" | jq -r '.resourceGroupName.value')
+
+                      echo "Function App: $FUNCTION_APP_NAME"
+                      echo ""
+                      echo "App Settings with Key Vault references:"
+                      az functionapp config appsettings list \
+                        --name $FUNCTION_APP_NAME \
+                        --resource-group $RESOURCE_GROUP \
+                        --query "[?contains(value, '@Microsoft.KeyVault')].{Name:name, Value:value}" \
+                        --output table
+
+                      echo ""
+                      echo "Managed Identity:"
+                      az functionapp identity show \
+                        --name $FUNCTION_APP_NAME \
+                        --resource-group $RESOURCE_GROUP \
+                        --query "{Type:type, PrincipalId:principalId}" \
+                        --output table
+
+  # ========================================
+  # DEPLOY TO PROD (with approval)
+  # ========================================
+  - stage: DeployProd
+    displayName: 'Deploy Infrastructure to Prod'
+    dependsOn: DeployDev
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    variables:
+      - group: hldro-prod-secrets
+      - name: environment
+        value: 'prod'
+    jobs:
+      - deployment: DeployInfrastructure
+        displayName: 'Deploy Bicep to Prod'
+        environment: 'hldro-prod-infra' # Requires manual approval in Azure DevOps
+        pool:
+          vmImage: 'ubuntu-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+
+                - task: AzureCLI@2
+                  displayName: 'What-If Analysis'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnectionProd)'
+                    scriptType: 'bash'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      echo "Running What-If analysis for PRODUCTION..."
+                      echo "This will deploy Key Vault with all secrets"
+
+                      az deployment sub what-if \
+                        --name hldro-prod-whatif-$(Build.BuildId) \
+                        --location westeurope \
+                        --template-file src/deploy/templates/bicep/main.bicep \
+                        --parameters src/deploy/environments/prod/parameters.local.json \
+                        --parameters sqlAdminUsername='$(sqlAdminUsername)' \
+                        --parameters sqlAdminPassword='$(sqlAdminPassword)' \
+                        --parameters useKeyVault=true
+
+                - task: AzureCLI@2
+                  displayName: 'Deploy Infrastructure with Key Vault'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnectionProd)'
+                    scriptType: 'bash'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      echo "Deploying PRODUCTION infrastructure..."
+                      echo "- Resource Group: hldro-prod-rg"
+                      echo "- Key Vault: hldro-prod-kv (Premium SKU)"
+                      echo "- Purge Protection: Enabled"
+                      echo "- Soft Delete: 90 days"
+
+                      az deployment sub create \
+                        --name hldro-prod-$(Build.BuildId) \
+                        --location westeurope \
+                        --template-file src/deploy/templates/bicep/main.bicep \
+                        --parameters src/deploy/environments/prod/parameters.local.json \
+                        --parameters sqlAdminUsername='$(sqlAdminUsername)' \
+                        --parameters sqlAdminPassword='$(sqlAdminPassword)' \
+                        --parameters useKeyVault=true \
+                        --output table
+
+                - task: AzureCLI@2
+                  displayName: 'Validate Deployment'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnectionProd)'
+                    scriptType: 'bash'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      # Get deployment outputs
+                      OUTPUTS=$(az deployment sub show \
+                        --name hldro-prod-$(Build.BuildId) \
+                        --query properties.outputs \
+                        --output json)
+
+                      echo "==================================="
+                      echo "Deployment Outputs:"
+                      echo "==================================="
+                      echo $OUTPUTS | jq .
+
+                      # Validate critical resources exist
+                      RESOURCE_GROUP=$(echo $OUTPUTS | jq -r '.resourceGroupName.value')
+                      KEY_VAULT_NAME=$(echo $OUTPUTS | jq -r '.keyVaultName.value')
+
+                      echo ""
+                      echo "==================================="
+                      echo "Validating resources in: $RESOURCE_GROUP"
+                      echo "==================================="
+
+                      az resource list --resource-group $RESOURCE_GROUP --output table
+
+                      echo ""
+                      echo "==================================="
+                      echo "Key Vault Security Settings:"
+                      echo "==================================="
+                      az keyvault show \
+                        --name $KEY_VAULT_NAME \
+                        --query "{Name:name, SKU:properties.sku.name, SoftDelete:properties.enableSoftDelete, PurgeProtection:properties.enablePurgeProtection, RetentionDays:properties.softDeleteRetentionInDays}" \
+                        --output table
+
+                - task: AzureCLI@2
+                  displayName: 'Security Audit'
+                  inputs:
+                    azureSubscription: '$(azureServiceConnectionProd)'
+                    scriptType: 'bash'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      echo "Running security audit..."
+
+                      OUTPUTS=$(az deployment sub show \
+                        --name hldro-prod-$(Build.BuildId) \
+                        --query properties.outputs \
+                        --output json)
+
+                      RESOURCE_GROUP=$(echo $OUTPUTS | jq -r '.resourceGroupName.value')
+                      KEY_VAULT_NAME=$(echo $OUTPUTS | jq -r '.keyVaultName.value')
+                      FUNCTION_APP_NAME=$(echo $OUTPUTS | jq -r '.functionAppName.value')
+
+                      echo "1. Key Vault Diagnostic Settings:"
+                      az monitor diagnostic-settings list \
+                        --resource $(az keyvault show --name $KEY_VAULT_NAME --query id -o tsv) \
+                        --query "value[].{Name:name, Enabled:logs[0].enabled}" \
+                        --output table
+
+                      echo ""
+                      echo "2. Function App uses Managed Identity:"
+                      az functionapp identity show \
+                        --name $FUNCTION_APP_NAME \
+                        --resource-group $RESOURCE_GROUP \
+                        --query "{Enabled:(type=='SystemAssigned'), PrincipalId:principalId}" \
+                        --output table
+
+                      echo ""
+                      echo "3. Key Vault Access Policies:"
+                      az keyvault show \
+                        --name $KEY_VAULT_NAME \
+                        --query "properties.accessPolicies[].{ObjectId:objectId, Permissions:permissions.secrets}" \
+                        --output table

@@ -1,0 +1,34 @@
+# Azure DevOps Variables for Development Environment
+# Import this in pipeline or create Variable Group
+
+variables:
+  # Azure
+  azureServiceConnection: 'azure-hldro-dev'
+  subscriptionId: '$(AZURE_SUBSCRIPTION_ID)' # From Variable Group
+  resourceGroupName: 'hldro-dev-rg'
+
+  # Storage
+  storageAccountName: 'hldrodevst'
+
+  # Functions
+  functionAppName: 'hldro-dev-func'
+  functionAppSku: 'Y1' # Consumption plan
+
+  # Service Bus
+  serviceBusName: 'hldro-dev-sb'
+  serviceBusSku: 'Standard'
+
+  # Application Insights
+  appInsightsName: 'hldro-dev-ai'
+
+  # Environment
+  environment: 'dev'
+  location: 'westeurope'
+
+  # Feature Flags
+  enableDetailedLogging: true
+  enableDebugMode: true
+
+  # Deployment
+  deploymentTimeoutMinutes: 30
+  healthCheckRetries: 3

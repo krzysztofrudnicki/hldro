@@ -1,0 +1,44 @@
+# Azure DevOps Variables for Production Environment
+# Import this in pipeline or create Variable Group
+# SECRETS should be in Azure Key Vault or Variable Group (marked as secret)
+
+variables:
+  # Azure
+  azureServiceConnection: 'azure-hldro-prod'
+  subscriptionId: '$(AZURE_SUBSCRIPTION_ID)' # From Variable Group
+  resourceGroupName: 'hldro-prod-rg'
+
+  # Storage
+  storageAccountName: 'hldroprodst'
+
+  # Functions
+  functionAppName: 'hldro-prod-func'
+  functionAppSku: 'EP1' # Premium plan for production
+
+  # Service Bus
+  serviceBusName: 'hldro-prod-sb'
+  serviceBusSku: 'Premium'
+
+  # Application Insights
+  appInsightsName: 'hldro-prod-ai'
+
+  # Environment
+  environment: 'prod'
+  location: 'westeurope'
+
+  # Feature Flags
+  enableDetailedLogging: false
+  enableDebugMode: false
+
+  # Deployment
+  deploymentTimeoutMinutes: 60
+  healthCheckRetries: 5
+
+  # Slots (Blue-Green Deployment)
+  enableSlots: true
+  stagingSlotName: 'staging'
+
+  # Backup & DR
+  enableBackup: true
+  backupRetentionDays: 30
+  enableGeoReplication: true

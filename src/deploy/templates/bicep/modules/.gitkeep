@@ -1,0 +1,6 @@
+# Placeholder for Bicep modules
+# Add your Bicep modules here:
+# - storage-account.bicep
+# - function-app.bicep
+# - service-bus.bicep
+# - app-insights.bicep

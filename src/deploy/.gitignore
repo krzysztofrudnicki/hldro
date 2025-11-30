@@ -1,0 +1,52 @@
+# Secrets and sensitive files
+*.secret.yml
+*.secret.json
+*secrets*.yml
+*secrets*.json
+*.env
+.env.*
+
+# Except templates
+!*.template.yml
+!*.template.json
+
+# Local configuration
+local.*.json
+local.*.yml
+
+# Azure credentials
+.azure/
+*.publishsettings
+*.azurePubxml
+
+# Terraform state (if used)
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+
+# Bicep build output
+*.bicep.json
+
+# Logs
+*.log
+logs/
+
+# Backup files
+*.backup
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+tmp/
+temp/
+*.tmp

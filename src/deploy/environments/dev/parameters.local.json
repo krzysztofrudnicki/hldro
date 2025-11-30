@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environment": {
+      "value": "dev"
+    },
+    "location": {
+      "value": "westeurope"
+    },
+    "projectName": {
+      "value": "hldro"
+    },
+    "sqlAdminUsername": {
+      "value": "sqladmin"
+    },
+    "sqlAdminPassword": {
+      "value": "ChangeMeToSecurePassword123!"
+    },
+    "repositoryUrl": {
+      "value": ""
+    },
+    "tags": {
+      "value": {
+        "Project": "HLDRO",
+        "Environment": "Development",
+        "ManagedBy": "Bicep",
+        "CostCenter": "Engineering",
+        "Owner": "DevTeam"
+      }
+    }
+  }
+}
